@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="shrinkage_da",
-    version="1.3.7",
+    version="1.0.0",
     author="Miika Ahdesmaki",
     author_email="miika.ahdesmaki@gmail.com",
     description="Shrinkage Discriminant Analysis",
