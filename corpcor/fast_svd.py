@@ -14,8 +14,9 @@ def positive_svd(m, tol):
     # determine rank of B  (= rank of m)
     if tol is None: 
       tol = max(m.shape) * max(d) * np.finfo(float).eps 
-    Positive = d > tol                            
-    return (d[Positive], u[:, Positive], v[:, Positive])
+    Positive = d > tol
+    sub_range = np.array(range(0,len(Positive)))[Positive] # subset of indices
+    return (d[Positive], u[:, sub_range], v.T[:, sub_range])
 
 def nsmall_svd(m, tol):
     B = np.matmul(m, m.T) # n by n matrix
