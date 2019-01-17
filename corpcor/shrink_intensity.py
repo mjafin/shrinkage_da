@@ -84,7 +84,7 @@ def estimate_lambda(x, w = None, verbose = False):
     # test data w = np.array([[0.5],[0.6],[0.7]])
     n, p = x.shape # how many samples and variables
     if p==1:
-        return 1
+        return float(1)
     if n < 3:
         exit("Sample size too small!")
     w = pvt_check_w(w, n)

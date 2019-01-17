@@ -55,7 +55,7 @@ def pvt_cppowscor(x, y, alpha, lambda_cor = None, w = None, verbose=False):
     w2 = np.sum(w*w)       # for w=1/n this equals 1/n   where n=dim(xs)[1]
     h1 = 1/(1-w2)       # for w=1/n this equals the usual h1=n/(n-1)
     if lambda_cor == 1 or alpha == 0: # in both cases R is the identity matrix
-        return y
+        return dict(cp_powr = y, lambda_cor = lambda_cor)
     (d, u, v) = fast_svd(xs)
     m = d.shape[0] # rank of xs
     d = np.column_stack(d).T # make d into a column vector
