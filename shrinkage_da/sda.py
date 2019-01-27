@@ -66,21 +66,25 @@ def sda(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = None, di
         diff = mu[:,k]-mup  
         pw[:,k] = diff/sc
     
+    was_diagonal = diagonal
     if not diagonal:
         if verbose:
             print("Computing inverse correlation matrix (pooled across classes) product")
-        pwdict = crossprod_powcor_shrink(xc, pw, alpha=-1, lambda_cor=lambda_cor, 
-                                         verbose=False)
-        pw = pwdict["cp_powr"]
-        regularisation["lambda_cor"] = pwdict["lambda_cor"] if lambda_cor is None else lambda_cor
-        lambda_estimated = True if lambda_cor is None else False
-        if verbose:
-            if lambda_estimated:  
-                print("Estimating optimal shrinkage intensity lambda (correlation matrix):", 
-                    regularisation["lambda_cor"])
-            else:
-                print("Specified shrinkage intensity lambda (correlation matrix):", 
-                    regularisation["lambda_cor"])
+        try:
+            pwdict = crossprod_powcor_shrink(xc, pw, alpha=-1, lambda_cor=lambda_cor, 
+                                             verbose=False)
+            pw = pwdict["cp_powr"]
+            regularisation["lambda_cor"] = pwdict["lambda_cor"] if lambda_cor is None else lambda_cor
+            lambda_estimated = True if lambda_cor is None else False
+            if verbose:
+                if lambda_estimated:  
+                    print("Estimating optimal shrinkage intensity lambda (correlation matrix):", 
+                          regularisation["lambda_cor"])
+                else:
+                    print("Specified shrinkage intensity lambda (correlation matrix):", 
+                          regularisation["lambda_cor"])
+        except np.linalg.LinAlgError:
+            was_diagonal = True
     ###
     for k in range(0,cl_count):
         pw[:,k] = pw[:,k]/sc
@@ -92,4 +96,4 @@ def sda(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = None, di
     ############################################################# 
 
     return dict(regularisation=regularisation, freqs=freqs, alpha=alpha, 
-                beta=pw.T, groups = my_cent["groups"])
+                beta=pw.T, groups = my_cent["groups"], was_diagonal = was_diagonal)
