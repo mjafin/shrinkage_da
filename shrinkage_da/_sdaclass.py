@@ -6,7 +6,9 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 
-from .predict_sda import predict_sda, sda, sda_ranking
+from predict_sda import predict_sda
+from sda import sda
+from sda_ranking import sda_ranking
 
 class ShrinkageDiscriminantAnalysis(BaseEstimator, ClassifierMixin):
     """ Shrinkage Discriminant Analysis using James-Stein shrinkage
@@ -104,7 +106,6 @@ class ShrinkageDiscriminantAnalysis(BaseEstimator, ClassifierMixin):
 
         # Input validation
         X = check_array(X)
-        
         my_preds = predict_sda(sda_object = self.sdamodel_, Xtest = X, verbose = self.verbose)
         return my_preds["predicted_class"]
     
@@ -126,7 +127,7 @@ class ShrinkageDiscriminantAnalysis(BaseEstimator, ClassifierMixin):
         # Input validation
         X = check_array(X)
         
-        my_preds = predict_sda(X)
+        my_preds = predict_sda(sda_object = self.sdamodel_, Xtest = X, verbose = self.verbose)
         return my_preds["posterior"]
 
     def feature_rank(self, X, y):

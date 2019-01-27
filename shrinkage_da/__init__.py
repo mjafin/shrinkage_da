@@ -1,4 +1,4 @@
-from ._sdaclasse import ShrinkageDiscriminantAnalysis
+from ._sdaclass import ShrinkageDiscriminantAnalysis
 
 from ._version import __version__
 
