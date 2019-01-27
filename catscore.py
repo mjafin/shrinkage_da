@@ -67,21 +67,24 @@ def catscore(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = Non
     for k in range(0,cl_count):
         diff = mu[:,k]-mup  
         cat[:,k] = diff/(m[k] * sc) # t-scores
-    
+    was_diagonal = diagonal # was diagonal used or not
     if not diagonal:
         if verbose:
             print("Computing inverse correlation matrix (pooled across classes) product")
-        catdict = crossprod_powcor_shrink(xc, cat, alpha=-0.5, lambda_cor=lambda_cor, 
+        try:
+            catdict = crossprod_powcor_shrink(xc, cat, alpha=-0.5, lambda_cor=lambda_cor, 
                                          verbose=False)
-        cat = catdict["cp_powr"]
-        regularisation["lambda_cor"] = catdict["lambda_cor"] if lambda_cor is None else lambda_cor
-        lambda_estimated = True if lambda_cor is None else False
-        if verbose:
-            if lambda_estimated:  
-                print("Estimating optimal shrinkage intensity lambda (correlation matrix):", 
-                    regularisation["lambda_cor"])
-            else:
-                print("Specified shrinkage intensity lambda (correlation matrix):", 
-                    regularisation["lambda_cor"])
+            cat = catdict["cp_powr"]
+            regularisation["lambda_cor"] = catdict["lambda_cor"] if lambda_cor is None else lambda_cor
+            lambda_estimated = True if lambda_cor is None else False
+            if verbose:
+                if lambda_estimated:  
+                    print("Estimating optimal shrinkage intensity lambda (correlation matrix):", 
+                          regularisation["lambda_cor"])
+                else:
+                    print("Specified shrinkage intensity lambda (correlation matrix):", 
+                          regularisation["lambda_cor"])
+        except np.linalg.LinAlgError:
+            was_diagonal = True # this can happen if SVD doesn't converge
     ###
-    return dict(regularisation=regularisation, freqs=freqs, cat=cat)  
+    return dict(regularisation=regularisation, freqs=freqs, cat=cat, was_diagonal=was_diagonal)

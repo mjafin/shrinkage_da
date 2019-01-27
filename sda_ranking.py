@@ -56,4 +56,4 @@ def sda_ranking(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = 
     # Without FDR just return sort order, scores, cats
     
     return dict(idx=idx, score = score[idx], cat = cat["cat"][idx,:], 
-                regularisation = cat["regularisation"], freqs = cat["freqs"])
+                regularisation = cat["regularisation"], freqs = cat["freqs"], was_diagonal = cat["was_diagonal"])
