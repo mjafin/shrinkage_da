@@ -30,7 +30,7 @@ def predict_sda(sda_object, Xtest, verbose = False):
     beta = sda_object["beta"]
     #cl_count = len(alpha)
     if p != beta.shape[1]:
-        exit("Different number of predictors in sda object (", beta.shape[1], ") and in Xtest (", p,")")
+        raise ValueError("Different number of predictors in sda object (" + str(beta.shape[1]) + ") and in Xtest (" + str(p) + ")")
     if verbose:
         print("Prediction uses ",p," features")
     probs = (np.matmul(beta, Xtest.T) + alpha).T
@@ -38,6 +38,6 @@ def predict_sda(sda_object, Xtest, verbose = False):
     probs = probs / np.sum(probs, axis=1, keepdims=True)
     
     #yhat = sda_object["groups"][np.argmax(probs, axis=1)]
-    yhat = [sda_object["groups"][myind] for myind in np.argmax(probs, axis=1)]
+    yhat = np.array([sda_object["groups"][myind] for myind in np.argmax(probs, axis=1)])
     
     return dict(predicted_class = yhat, posterior = probs)

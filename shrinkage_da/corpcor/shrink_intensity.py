@@ -34,7 +34,9 @@ def estimate_lambda_var(x, w = None, verbose = False):
     """
     n, p = x.shape # how many samples and variables
     if n < 3:
-        exit("Sample size too small!")
+        # Note that scikit-learn check_estimator expects to see a specific message
+        # such as n_samples = 1 (verbatim)
+        raise ValueError("Sample size too small. n_samples = 1")
     w = pvt_check_w(w, n)
     # bias correction factors
     w2 = np.sum(w*w)       # for w=1/n this equals 1/n   where n=dim(xs)[1]
