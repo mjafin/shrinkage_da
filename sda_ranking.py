@@ -39,7 +39,7 @@ def sda_ranking(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = 
         cat-scores, regularisation parameters and prior frequencies
     """
     if ranking_score not in ["entropy","avg","max"]:
-        exit("ranking_score must be one of 'entropy', 'avg' or 'max'")
+        raise ValueError("ranking_score must be one of 'entropy', 'avg' or 'max'")
     cat = catscore(Xtrain, L, lambda_cor=lambda_cor, lambda_var=lambda_var, 
                    lambda_freqs=lambda_freqs, diagonal=diagonal, verbose=verbose)
     cl_count = cat["cat"].shape[1]

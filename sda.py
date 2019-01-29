@@ -39,7 +39,7 @@ def sda(Xtrain, L, lambda_cor = None, lambda_var = None, lambda_freqs = None, di
     """
     nX, pX = Xtrain.shape
     if len(L) != nX:
-        exit("Number of rows in input matrix Xtrain must match the number of class labels")
+        raise ValueError("Number of rows in input matrix Xtrain must match the number of class labels")
     regularisation = dict(lambda_cor = 1, lambda_var = np.nan, lambda_freqs = np.nan) # regularisation parameters for correlation, variance and priors
     my_cent = centroids(Xtrain, L, lambda_var, lambda_freqs, var_groups = False, centered_data = True, verbose = verbose)
     cl_count = len(my_cent["groups"]) - 1 # number of classes 
